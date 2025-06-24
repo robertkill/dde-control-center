@@ -69,6 +69,10 @@ AccountsWorker::AccountsWorker(UserModel *userList, QObject *parent)
         m_userModel->setAutoLoginVisable(true);
         m_userModel->setNoPassWordLoginVisable(false);
     }
+
+    // 新增：根据DBus属性QuickLoginEnabled设置快速登录可见性
+    m_userModel->setQuickLoginVisible(m_accountsInter->quickLoginEnabled());
+    connect(m_accountsInter, &AccountsDBusProxy::QuickLoginEnabledChanged, m_userModel, &UserModel::setQuickLoginVisible);
 }
 
 void AccountsWorker::getAllGroups()

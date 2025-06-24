@@ -30,6 +30,10 @@ public:
     Q_PROPERTY(QList<QDBusObjectPath> Sessions READ sessions NOTIFY SessionsChanged)
     QList<QDBusObjectPath> sessions();
 
+    // 新增：QuickLoginEnabled属性
+    Q_PROPERTY(bool QuickLoginEnabled READ quickLoginEnabled)
+    bool quickLoginEnabled();
+
 signals:
     void UserAdded(const QString &in0);
     void UserDeleted(const QString &in0);
@@ -40,6 +44,8 @@ signals:
     // displaymanager
     void SessionsChanged(const QList<QDBusObjectPath> &value) const;
 
+    // 新增：QuickLoginEnabled属性变化信号
+    void QuickLoginEnabledChanged(bool value);
 
 public slots:
     QDBusPendingReply<QDBusObjectPath> CreateUser(const QString &in0, const QString &in1, int in2);
@@ -55,6 +61,7 @@ public slots:
     QDBusPendingReply<> deleteGroup(const QString &in0);
     QDBusPendingReply<> createGroup(const QString &in0, uint32_t in1, bool in2);
     QDBusPendingReply<> modifyGroup(const QString &in0, const QString &in1, uint32_t in2);
+    void onPropertiesChanged(const QDBusMessage &message);
 
 private:
     void init();
