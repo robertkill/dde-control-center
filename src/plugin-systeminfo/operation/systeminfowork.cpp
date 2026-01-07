@@ -258,15 +258,21 @@ void SystemInfoWork::initSystemCopyright()
 {
     const QSettings settings("/etc/deepin-installer.conf", QSettings::IniFormat);
     QString oem_copyright = settings.value("system_info_vendor_name").toString().toUtf8();
+
+    const int buildYear = QString(__DATE__).right(4).toInt();
+    int validYear = QDateTime::currentDateTime().date().year();
+    if (buildYear > validYear) {
+        validYear = buildYear;
+    }
     if (oem_copyright.isEmpty()) {
         if (DSysInfo::productType() != DSysInfo::ProductType::Uos)
             oem_copyright = QCoreApplication::translate("LogoModule", "Copyright© 2011-%1 Deepin Community")
-                    .arg(QString(__DATE__).right(4));
+                    .arg(validYear);
         else
             oem_copyright =  QCoreApplication::translate(
                            "LogoModule",
                            "Copyright© 2019-%1 UnionTech Software Technology Co., LTD")
-                    .arg(QString(__DATE__).right(4));
+                    .arg(validYear);
     }
 
     m_model->setSystemCopyright(oem_copyright);
